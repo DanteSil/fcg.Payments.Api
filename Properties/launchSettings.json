@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PaymentsAPI": {
+      "commandName": "Project",
+      "applicationUrl": "http://localhost:5103"
+    }
+  }
+}
