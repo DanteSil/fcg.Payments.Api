@@ -14,6 +14,8 @@ dotnet run
 
 A fila `pedidos.faturamento` precisa existir antes de iniciar o serviço. Para usar outro broker, sobrescreva a URI com a variável de ambiente `RabbitMQ__Uri`.
 
-No painel em http://localhost:15672, confirme que a fila mostra um consumidor. Em **Exchanges → pedidos → Publish message**, use a routing key `pedido.criado` e publique o payload `{"pedidoId":"teste-001"}`.
+Chame `POST /api/library/{gameId}` no catálogo com um JWT de usuário comum e anote o `orderId` da resposta. O console de Pagamentos deve mostrar o status para esse pedido. A simulação aprova preços maiores que zero e até 1000. Os demais são rejeitados.
 
-O console deve mostrar a chave e o payload. Depois do log, o serviço confirma a entrega com um ACK manual. Se a fila estiver vazia antes do teste, os contadores **Ready** e **Unacked** devem voltar a zero.
+No painel em http://localhost:15672, abra **Queues and Streams → pagamentos.catalogo → Get messages**. Selecione a opção de recolocar a mensagem na fila para inspecionar o `PaymentProcessedEvent` sem removê-lo. Confira `orderId`, `userId`, `gameId`, `price` e `status`.
+
+O serviço cria a exchange durável `pagamentos` e vincula a fila durável `pagamentos.catalogo` pela chave `pagamento.processado`. Ele confirma o pedido original somente após o broker confirmar a publicação do resultado.
