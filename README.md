@@ -19,3 +19,7 @@ Chame `POST /api/library/{gameId}` no catálogo com um JWT de usuário comum e a
 No painel em http://localhost:15672, abra **Queues and Streams → pagamentos.catalogo → Get messages**. Selecione a opção de recolocar a mensagem na fila para inspecionar o `PaymentProcessedEvent` sem removê-lo. Confira `orderId`, `userId`, `gameId`, `price` e `status`.
 
 O serviço cria a exchange durável `pagamentos` e vincula a fila durável `pagamentos.catalogo` pela chave `pagamento.processado`. Ele confirma o pedido original somente após o broker confirmar a publicação do resultado.
+
+## Kubernetes
+
+Os manifestos deste serviço ficam em k8s/. O script de implantação, a infraestrutura e as instruções para clonar os cinco repositórios estão em https://github.com/DanteSil/fcg.Infrastructure.

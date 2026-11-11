@@ -1,0 +1,13 @@
+{
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "payments-api-config",
+    "namespace": "fcg"
+  },
+  "data": {
+    "RabbitMQ__DeclareOrdersTopology": "true",
+    "ASPNETCORE_HTTP_PORTS": "8080",
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  },
+  "kind": "ConfigMap"
+}
