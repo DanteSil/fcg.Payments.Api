@@ -25,6 +25,12 @@ public sealed class OrderCreatedConsumer(
 
         await using var connection = await factory.CreateConnectionAsync(stoppingToken);
         await using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
+        if (configuration.GetValue<bool>("RabbitMQ:DeclareOrdersTopology"))
+        {
+            await channel.ExchangeDeclareAsync("pedidos", ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
+            await channel.QueueDeclareAsync(QueueName, durable: true, exclusive: false, autoDelete: false, cancellationToken: stoppingToken);
+            await channel.QueueBindAsync(QueueName, "pedidos", "pedido.criado", cancellationToken: stoppingToken);
+        }
         var options = new CreateChannelOptions(publisherConfirmationsEnabled: true, publisherConfirmationTrackingEnabled: true);
         await using var publisher = await connection.CreateChannelAsync(options, stoppingToken);
         await publisher.ExchangeDeclareAsync(ResultExchange, ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
